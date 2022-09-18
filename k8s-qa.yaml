@@ -24,13 +24,34 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-   name: demo
+   name: s-j-qatest
    namespace: qatest
 spec:
    selector:
      app: jenkins-demo
-   type: NodePort
+   type: ClusterIP
    ports:
    - port: 18888
      targetPort: 18888
-     nodePort: 31891
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-j-qatest
+  namespace: qatest
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: j-qatest.test.investoday.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: s-j-qatest
+            port:
+              number: 18888
+

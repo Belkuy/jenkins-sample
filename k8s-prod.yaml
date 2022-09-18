@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jenkins-demo
-  namespace: production
+  namespace: prod
 spec:
   replicas: 1
   selector:
@@ -24,13 +24,33 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-   name: jenkins-demo
-   namespace: production
+   name: s-j-prod
+   namespace: prod
 spec:
-   selector:
-     app: jenkins-demo
-   type: NodePort
-   ports:
-   - port: 18888
-     targetPort: 18888
-     nodePort: 31890
+  selector:
+    app: jenkins-demo
+  type: ClusterIP
+  ports:
+  - port: 18888
+    targetPort: 18888
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-j-prod
+  namespace: prod
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: j-prod.test.investoday.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: s-j-prod
+            port:
+              number: 18888
