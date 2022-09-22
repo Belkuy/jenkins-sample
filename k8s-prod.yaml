@@ -13,6 +13,8 @@ spec:
       labels:
         app: jenkins-demo
     spec:
+      imagePullSecrets:
+      - name: harbor-secret
       containers:
       - image: harbor.test.invsetoday.net/demo/jenkins-demo:<BUILD_TAG>
         imagePullPolicy: Always
