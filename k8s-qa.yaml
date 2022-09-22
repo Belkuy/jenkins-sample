@@ -14,8 +14,8 @@ spec:
         app: jenkins-demo
     spec:
       containers:
-      - image: belbert/jenkins-demo:<BUILD_TAG>
-        imagePullPolicy: IfNotPresent
+      - image: harbor.test.invsetoday.net/demo/jenkins-demo:<BUILD_TAG>
+        imagePullPolicy: Always
         name: jenkins-demo
         env:
         - name: branch
